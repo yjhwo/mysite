@@ -16,8 +16,8 @@
 		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 		<div id="content">
 			<div id="guestbook">
-				<form action="/mysite/gb?a=add" method="post">
-					<input type="hidden" name="a" value="insert">
+				<form action="/mysite/gb" method="post">
+					<input type="hidden" name="a" value="add">
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>
