@@ -17,7 +17,16 @@ public class UserActionFactory extends ActionFactory {
 			action = new JoinSuccessAction();
 		}else if("loginform".equals(actionName)){
 			action = new LoginFormAction();
+		}else if("login".equals(actionName)){
+			action = new LoginAction();
+		}else if("logout".equals(actionName)){
+			action = new LogoutAction();			
+		}else if("modifyform".equals(actionName)){
+			action = new ModifyFormAction();			
+		}else if("modify".equals(actionName)){
+			action = new ModifyAction();			
 		}else{
+		
 			// 잘 못된 요청 들어온 경우! 그냥 main으로 돌린다.
 			action = new DefaultAction();
 		}

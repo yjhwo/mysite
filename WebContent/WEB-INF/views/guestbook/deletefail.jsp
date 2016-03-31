@@ -8,10 +8,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>mysite</title>
 </head>
 <body>
-	<h1>비밀번호가 일치하지 않습니다.</h1>
-	<a href="/mysite/gb?a=deleteform&no=<%=no%>">비밀번호 다시 입력하기</a>
+	<div id="container">
+		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+		<div id="content">
+			<h1>비밀번호가 일치하지 않습니다.</h1>
+			<a href="/mysite/gb?a=deleteform&no=<%=no%>">비밀번호 다시 입력하기</a>
+		</div>
+		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	</div>
+	
 </body>
 </html>

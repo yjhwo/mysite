@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%
-	String result = request.getParameter("result");
 
-%>
 <!doctype html>
 <html>
 <head>
@@ -21,15 +18,9 @@
 					<input id="email" name="email" type="text" value="">
 					<label class="block-label" >패스워드</label>
 					<input name="password" type="password" value="">
-					<%
-						if("fail".equals(result)){
-					%>
 						<p>
 							로그인이 실패 했습니다.
 						</p>
-					<%
-						}
-					%>
 					<input type="submit" value="로그인">
 				</form>
 			</div>

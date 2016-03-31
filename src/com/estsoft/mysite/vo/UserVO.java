@@ -9,7 +9,31 @@ public class UserVO {
 	
 	public UserVO(){	}
 
-	
+	public UserVO(String name, String password, String gender) {
+		this.name = name;
+		this.password = password;
+		this.gender = gender;
+	}
+
+	public UserVO(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
+	public UserVO(Long no, String name, String email) {
+		this.no = no;
+		this.name = name;
+		this.email = email;
+	}
+
+
+	public UserVO(Long no, String name, String email, String gender) {
+		this.no = no;
+		this.name = name;
+		this.email = email;
+		this.gender = gender;
+	}
+
 	public UserVO(String name, String email, String password, String gender) {
 		this.name = name;
 		this.email = email;
