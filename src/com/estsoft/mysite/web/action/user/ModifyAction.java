@@ -20,8 +20,19 @@ public class ModifyAction implements Action {
 		
 		// 세션 가져오기
 		HttpSession session = request.getSession();
+		
+		if(session == null){
+			WebUtil.redirect(request, response, "/mysite/main");
+			return;
+		}
+			
 		UserVO authUser = (UserVO)session.getAttribute("authUser");
 		System.out.println("ModifyAction의 authUser "+authUser);
+		
+		if(authUser == null){
+			WebUtil.redirect(request, response, "mysite/main");
+			return;
+		}
 		
 		Long no = Long.parseLong(request.getParameter("no"));
 		String name = request.getParameter("name");

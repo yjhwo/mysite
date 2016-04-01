@@ -1,7 +1,9 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%
-	String result = request.getParameter("result");
-
+	String result= request.getParameter("result");
 %>
 <!doctype html>
 <html>
@@ -12,7 +14,7 @@
 </head>
 <body>
 	<div id="container">
-		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+		<c:import url="/WEB-INF/views/include/header.jsp"/>
 		<div id="content">
 			<div id="user">
 				<form id="login-form" name="loginform" method="post" action="/mysite/user">
@@ -21,21 +23,24 @@
 					<input id="email" name="email" type="text" value="">
 					<label class="block-label" >패스워드</label>
 					<input name="password" type="password" value="">
+					
 					<%
 						if("fail".equals(result)){
-					%>
+					%>	
 						<p>
-							로그인이 실패 했습니다.
+							로그인이 실패했습니다.
 						</p>
 					<%
 						}
 					%>
+					
 					<input type="submit" value="로그인">
+
 				</form>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
-		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+		<c:import url="/WEB-INF/views/include/navigation.jsp"/>
+		<c:import url="/WEB-INF/views/include/footer.jsp"/>
 	</div>
 </body>
 </html>

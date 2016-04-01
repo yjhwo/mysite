@@ -24,7 +24,7 @@ public class JoinAction implements Action {
 		UserVO vo = new UserVO(name, email, password, gender);
 		UserDAO dao = new UserDAO(new MySQLWebDBConnection());
 		dao.insert(vo);
-				
+		
 		WebUtil.redirect(request, response, "/mysite/user?a=joinsuccess");
 	}
 
