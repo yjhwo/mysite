@@ -33,12 +33,12 @@
 				<ul>
 					<c:set var="br" value="<br>" scope="page"/>
 					<c:set var="count" value="${fn:length(list) }"/>
-					<c:forEach items="${list }" var="vo">
+					<c:forEach items="${list }" var="vo" varStatus ="status">
 					<li>
 						<table>
-						
+			
 							<tr>
-								<td>[${count-index }]</td>
+								<td>[${count-status.index }]</td>
 								<td>${vo.name }</td>
 								<td>${vo.reg_date }</td>
 								<td><a href="/mysite/gb?a=deleteform&no=${vo.no }">삭제</a></td>

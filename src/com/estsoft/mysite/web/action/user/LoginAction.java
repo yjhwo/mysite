@@ -45,6 +45,10 @@ public class LoginAction implements Action {
 		// 사용하는 쪽에선 false 또는 파라미터 값 안 주고 사용?
 		session.setAttribute("authUser", authUser);			// UserVO객체를 저장
 		
+		UserVO uu = (UserVO)session.getAttribute("authUser");
+		System.out.println("userVO:::::"+uu);
+		uu.getNo();
+		
 		WebUtil.redirect(request, response, "/mysite/main");
 		
 		

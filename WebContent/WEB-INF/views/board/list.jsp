@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% pageContext.setAttribute("newLine", "\r\n"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
 		<c:import url="/WEB-INF/views/include/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="/mysite/board" method="post">
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -26,35 +27,45 @@
 						<th>조회수</th>
 						<th>작성일</th>
 						<th>&nbsp;</th>
-					</tr>				
+					</tr>			
+					
+					<c:set var="br" value="<br>" scope="page"/>
+					<c:set var="count" value="${fn:length(list) }"/>
+					<c:forEach items="${list }" var="vo" varStatus ="status">
+					
 					<tr>
-						<td>3</td>
-						<td><a href="">세 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-11 12:04:20</td>
-						<td><a href="" class="del">삭제</a></td>
+						<td>${count-status.index }</td>
+						<td style="text-align:left; padding-left:20px"><a href="/mysite/board?a=view&no=${vo.no }">${vo.title }</a></td>
+						<td>${vo.user_name }</td>
+						<td>${vo.viewCount }</td>
+						<td>${vo.reg_date }</td>
+						
+						<c:if test="${sessionScope.authUser.no == vo.user_no }">
+							<td><a href="/mysite/board?a=delete&no=${vo.no }" class="del">삭제</a></td>
+						</c:if>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td><a href="">두 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-02 12:04:12</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td><a href="">첫 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-09-25 07:24:32</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
+					
+					</c:forEach>	
+					
 				</table>
+				
+				<div class="pager">
+					<ul>
+						<li><a href="">◀</a></li>
+						<li><a href="">1</a></li>
+						<li class="selected">2</li>
+						<li><a href="">3</a></li>
+						<li><a href="">4</a></li>
+						<li><a href="">5</a></li>
+						<li><a href="">▶</a></li>
+					</ul>
+				</div>
 				<div class="bottom">
-					<a href="" id="new-book">글쓰기</a>
-				</div>				
+					<c:if test="${not empty sessionScope.authUser }">
+						<a href="/mysite/board?a=addForm&user_no=${sessionScope.authUser.no }" id="new-book">글쓰기</a>
+					</c:if>
+				</div>
+								
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/include/navigation.jsp"/>

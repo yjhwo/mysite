@@ -20,22 +20,20 @@
 					</tr>
 					<tr>
 						<td class="label">제목</td>
-						<td>제목입니다.</td>
+						<td>${requestScope.vo.title }</td>
 					</tr>
 					<tr>
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								내용 1입니다.<br>
-								내용 2입니다.<br>
-								내용 3입니다.
+								${requestScope.vo.content }
 							</div>
 						</td>
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="">글목록</a>
-					<a href="">글수정</a>
+					<a href="/mysite/board">글목록</a>
+					<a href="/mysite/board?a=modify&no=${requestScope.vo.no }">글수정</a>
 				</div>
 			</div>
 		</div>
