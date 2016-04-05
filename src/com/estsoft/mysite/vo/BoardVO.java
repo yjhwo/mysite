@@ -15,13 +15,29 @@ public class BoardVO {
 	public BoardVO(){	}
 
 
+
+	public BoardVO(Long group_no, Long order_no, Long depth) {
+		this.group_no = group_no;
+		this.order_no = order_no;
+		this.depth = depth;
+	}
+
+
+
 	public BoardVO(String title, String content) {
 		this.title = title;
 		this.content = content;
 	}
 
 
-	public BoardVO(String title, String content, Long user_no) {
+	public BoardVO(Long no, String title, String content) {	// 글 번호
+		this.no = no;
+		this.title = title;
+		this.content = content;
+	}
+
+
+	public BoardVO(String title, String content, Long user_no) {	// 사용자 번호 
 		this.title = title;
 		this.content = content;
 		this.user_no = user_no;
@@ -38,7 +54,6 @@ public class BoardVO {
 	}
 
 
-	
 
 	public BoardVO(Long no, String title, String content, String reg_date, Long viewCount, Long group_no, Long order_no,
 			Long depth, Long user_no, String user_name) {

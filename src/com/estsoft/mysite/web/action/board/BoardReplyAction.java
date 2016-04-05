@@ -12,23 +12,30 @@ import com.estsoft.mysite.vo.BoardVO;
 import com.estsoft.web.WebUtil;
 import com.estsoft.web.action.Action;
 
-public class BoardModifyAction implements Action {
+public class BoardReplyAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Long no = Long.parseLong(request.getParameter("no"));	// 게시물 번호
-		System.out.println("BoardModifyAction: "+no);
+		System.out.println("BoardReplyAction: "+no);
 		
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
+		if( no == null || WebUtil.isNumeric( Long.toString(no) ) == false ) {
+			WebUtil.redirect( request, response, request.getContextPath() + "/board" );
+			return;
+		}
 		
-		// 수정 처리 (dao)
-		BoardVO vo = new BoardVO(no, title, content);
+		
+		// dao에서 게시물 번호에 대한 값 가져와서 넘겨주기
 		BoardDAO dao = new BoardDAO(new MySQLWebDBConnection());
-		dao.modify(vo);
+		BoardVO vo = dao.getReplyInform(no);
+		System.out.println("BoardReplyAction vo:"+vo);
 		
-		WebUtil.redirect(request, response, "/mysite/board");
+		request.setAttribute("vo", vo);
+		
+//		WebUtil.forward(request, response, "/WEB-INF/views/board/replyform.jsp?no="+no);
+		WebUtil.forward(request, response, "/WEB-INF/views/board/replyform.jsp");
+		
 	}
 
 }

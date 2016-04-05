@@ -17,10 +17,6 @@
 				<form class="board-form" method="post" action="/mysite/board">
 					<input type = "hidden" name = "a" value="write">
 					<input type = "hidden" name = "user_no" value="${sessionScope.authUser.no }">
-					<input type = "hidden" name = "no" value="$">
-			<!-- 		<input type = "hidden" name = "group_no" value="">
-					<input type = "hidden" name = "order_no" value="">
-					<input type = "hidden" name = "depth" value=""> -->
 					
 					<table class="tbl-ex">
 						<tr>

@@ -15,7 +15,8 @@
 		<c:import url="/WEB-INF/views/include/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="/mysite/board" method="post">
+				<form id="search_form" action="/mysite/board" method="get">
+					<input type="hidden" name="a" value="search">
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -35,7 +36,20 @@
 					
 					<tr>
 						<td>${count-status.index }</td>
-						<td style="text-align:left; padding-left:20px"><a href="/mysite/board?a=view&no=${vo.no }">${vo.title }</a></td>
+						<c:choose>
+						<c:when test="${vo.depth > 0 }">
+							<td style="text-align:left; padding-left:${vo.depth*20}px">
+								<img src="${pageContext.request.contextPath}/assets/images/reply.png">
+								<a href="/mysite/board?a=view&no=${vo.no }&user_no=${vo.user_no }">${vo.title }</a>
+							</td>
+						</c:when>
+						<c:otherwise>
+							<td style="text-align:left">
+								<a href="/mysite/board?a=view&no=${vo.no }&user_no=${vo.user_no }">${vo.title }</a>
+							</td>
+						</c:otherwise>
+						</c:choose>
+						
 						<td>${vo.user_name }</td>
 						<td>${vo.viewCount }</td>
 						<td>${vo.reg_date }</td>

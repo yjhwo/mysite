@@ -22,4 +22,9 @@ public class WebUtil {
 		rd.forward(request, response);
 	}
 	
+	public static boolean isNumeric( String value ) {
+		return value != null && value.matches( "[-+]?\\d*\\.?\\d+" );  
+	}
+
+	
 }
