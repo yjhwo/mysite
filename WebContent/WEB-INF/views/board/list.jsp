@@ -30,8 +30,7 @@
 						<th>&nbsp;</th>
 					</tr>			
 					
-					<c:set var="br" value="<br>" scope="page"/>
-					<c:set var="count" value="${fn:length(list) }"/>
+					<c:set var="count" value="${pageMap.total-5*(pageMap.page-1) }"/>
 					<c:forEach items="${list }" var="vo" varStatus ="status">
 					
 					<tr>
@@ -40,7 +39,7 @@
 						<c:when test="${vo.depth > 0 }">
 							<td style="text-align:left; padding-left:${vo.depth*20}px">
 								<img src="${pageContext.request.contextPath}/assets/images/reply.png">
-								<a href="/mysite/board?a=view&no=${vo.no }&user_no=${vo.user_no }">${vo.title }</a>
+								<a href="/mysite/board?a=view&no=${vo.no }&user_no=${vo.user_no }&page=${pageMap.page}">${vo.title }</a>
 							</td>
 						</c:when>
 						<c:otherwise>
@@ -65,13 +64,24 @@
 				
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li><a href="">4</a></li>
-						<li><a href="">5</a></li>
-						<li><a href="">▶</a></li>
+						<c:if test="${pageMap.left == 1 }">
+							<li><a href="/mysite/board?page=${pageMap.startPage-5 }">◀</a></li>	
+						</c:if>
+						<c:forEach begin="${pageMap.startPage }" end="${pageMap.lastPage }" var="i">
+							<c:choose>
+								<c:when test="${i == pageMap.page }">
+									<li class="selected"><a href="/mysite/board?page=${i }">${i }</a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="/mysite/board?page=${i }">${i }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						
+						<c:if test="${pageMap.right == 1 }">
+							<li><a href="/mysite/board?page=${pageMap.lastPage +1 }">▶</a></li>
+						</c:if>
+						
 					</ul>
 				</div>
 				<div class="bottom">

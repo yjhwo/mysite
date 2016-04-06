@@ -20,6 +20,77 @@ public class BoardDAO {
 	}
 
 
+	public int getTotalCount(String kwd) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int count = 0;
+		
+		try{
+			conn = dbConnection.getConnection();
+			String sql = "select count(*) from board "
+						+"where title like '%"+kwd+"%' or content like '%"+kwd+"%'";
+	
+			pstmt = conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+			
+		}catch( SQLException ex ) {
+			System.out.println( "error:" + ex );
+		} finally {
+			try{
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+				if( conn != null ) {
+					conn.close();
+				}
+			}catch( SQLException ex ) {
+				ex.printStackTrace();
+			}
+		}		
+		
+		return count;
+	}
+
+	public int getTotalCount() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int count = 0;
+		
+		try{
+			conn = dbConnection.getConnection();
+			String sql = "select count(*) from board";
+	
+			pstmt = conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+			
+		}catch( SQLException ex ) {
+			System.out.println( "error:" + ex );
+		} finally {
+			try{
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+				if( conn != null ) {
+					conn.close();
+				}
+			}catch( SQLException ex ) {
+				ex.printStackTrace();
+			}
+		}		
+		
+		return count;
+	}
+	
 	public void updateGroupOrder(BoardVO vo) {			// 같은 그룹중에 order no값 바꾸는 것
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -51,7 +122,7 @@ public class BoardDAO {
 
 	}
 	
-	public List<BoardVO> search(String kwd) {
+	public List<BoardVO> search(String kwd, int page) {
 		List<BoardVO> list = new ArrayList<BoardVO>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -61,12 +132,14 @@ public class BoardDAO {
 			conn = dbConnection.getConnection();
 			String sql = "SELECT b.no, b.title, b.content, u.no as user_no, u.name, b.viewCount, DATE_FORMAT(b.reg_date,'%Y-%m-%d %h:%i:%s') "
 					+ "FROM board b, user u where b.user_no = u.no AND (b.title LIKE ? OR b.content LIKE ?) "
-					+ "ORDER BY b.group_no DESC, b.order_no ASC";
+					+ "ORDER BY b.group_no DESC, b.order_no ASC "
+					+ "limit ?, 5";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%" + kwd + "%");
 			pstmt.setString(2, "%" + kwd + "%");
-
+			pstmt.setInt(3, (page-1)*5);
+			
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -286,7 +359,7 @@ public class BoardDAO {
 		return vo;
 	}
 
-	public BoardVO get(Long no) { // 게시글 번호
+	public BoardVO get(Long no) { // 게시글 번호 얻어오기
 		BoardVO vo = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -326,21 +399,26 @@ public class BoardDAO {
 		return vo;
 	}
 
-	public List<BoardVO> getList() {
+	public List<BoardVO> getList(int page) {
 		List<BoardVO> list = new ArrayList<BoardVO>();
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
 			conn = dbConnection.getConnection();
-			stmt = conn.createStatement();
+			
 
 			String sql = "SELECT b.no, b.title, b.content, u.no as user_no, u.name, b.viewCount, DATE_FORMAT(b.reg_date,'%Y-%m-%d %h:%i:%s'), "
 					+ "b.group_no, b.order_no, b.depth "
-					+ "from board b, user u where b.user_no = u.no " + "ORDER BY b.group_no DESC, b.order_no ASC";
-			rs = stmt.executeQuery(sql);
-
+					+ "from board b, user u where b.user_no = u.no " + "ORDER BY b.group_no DESC, b.order_no ASC "
+					+ "limit ?, 5";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, (page-1)*5);
+			
+			rs = pstmt.executeQuery();
+			
 			while (rs.next()) {
 				Long no = rs.getLong(1);
 				String title = rs.getString(2);
@@ -364,8 +442,8 @@ public class BoardDAO {
 			try {
 				if (rs != null)
 					rs.close();
-				if (stmt != null)
-					stmt.close();
+				if (pstmt != null)
+					pstmt.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {

@@ -23,7 +23,7 @@ public class BoardActionFactory extends ActionFactory {
 			action = new BoardModifyAction();			
 		}else if("delete".equals(actionName)){		// 게시물 삭제
 			action = new BoardDeleteAction();			
-		}else if("search".equals(actionName)){		// 검색
+		}else if("search".equals(actionName)){		// keyword 검색
 			action = new BoardSearchAction();
 		}else if("reply".equals(actionName)){		// 답글
 			action = new BoardReplyAction();				
