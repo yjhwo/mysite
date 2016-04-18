@@ -25,6 +25,8 @@ public class UserActionFactory extends ActionFactory {
 			action = new ModifyFormAction();			
 		}else if("modify".equals(actionName)){
 			action = new ModifyAction();			
+		}else if("checkemail".equals(actionName)){		// Ajax Request
+			action = new CheckEmailAction();			
 		}else{
 		
 			// 잘 못된 요청 들어온 경우! 그냥 main으로 돌린다.

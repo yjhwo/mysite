@@ -1,6 +1,9 @@
 package com.estsoft.mysite.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import com.estsoft.db.DBConnection;
 import com.estsoft.mysite.vo.UserVO;
@@ -12,6 +15,41 @@ public class UserDAO {
 		this.dbConnection = dbConnection;
 	}
 
+	public UserVO get(String email){
+		UserVO vo = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = dbConnection.getConnection();
+			String sql = "SELECT no,email FROM user WHERE email = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				vo = new UserVO();
+				vo.setNo(rs.getLong(1));
+				vo.setEmail(rs.getString(2));
+			}
+			
+			return vo;
+		}catch(SQLException ex){
+			System.out.println("error:"+ex);
+			return null;
+		}finally{
+			try {
+				if (pstmt != null)			pstmt.close();
+				if (conn != null)			conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
 	// method는 테이블에 CRUD하는 이름으로 지어주는 게 좋다.
 	public void update(UserVO vo){
 		Connection conn = null;
