@@ -53,9 +53,52 @@ private DBConnection dbConnection;
 		return cnt;
 	}
 	
-	public void insert(GuestBookVO vo){
+	public GuestBookVO get(Long no){
+		GuestBookVO vo = null;
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = dbConnection.getConnection();
+			
+			String sql = "SELECT no, name, reg_date, message, passwd FROM guestbook WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				Long No = rs.getLong(1);
+				String name = rs.getString(2);
+				String reg_date = rs.getString(3);
+				String message = rs.getString(4);
+				String passwd = rs.getString(5);
+				vo = new GuestBookVO(No, name, reg_date, message, passwd);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if( rs != null) 	rs.close();
+				if (pstmt != null)	pstmt.close();
+				if (conn != null)	conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return vo;
+	}
+	
+	// long값 return하게..
+	public Long insert(GuestBookVO vo){
+		Long no = 0L;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		
 		try{
 			conn = dbConnection.getConnection();
@@ -66,14 +109,22 @@ private DBConnection dbConnection;
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getMessage());
 			pstmt.setString(3, vo.getPasswd());
-			
 			pstmt.executeUpdate();
 			
+			//------------------------------------
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+			if(rs.next()){
+				no = rs.getLong(1);
+			}
+			return no;
 		} catch(SQLException ex){
 			System.out.println("error:"+ex);
 			ex.printStackTrace();
+			return 0L;
 		} finally{
 			try{
+				if(rs != null)	rs.close();
 				if(pstmt != null)	pstmt.close();
 				if(conn != null)	conn.close();
 			}catch(SQLException ex){
@@ -120,4 +171,44 @@ private DBConnection dbConnection;
 		
 		return list;
 	}
+	//오버로딩
+	public List<GuestBookVO> getList(int page){
+		List<GuestBookVO> list = new ArrayList<GuestBookVO>();
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = dbConnection.getConnection();
+			stmt = conn.createStatement();
+
+			String sql = "SELECT no,name,DATE_FORMAT(reg_date,'%Y-%m-%d %h:%i:%s'),message from guestbook " +
+						"ORDER BY reg_date desc LIMIT " + (page-1)*5 +",5";
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()){
+				Long no = rs.getLong(1);
+				String name = rs.getString(2);
+				String reg_date = rs.getString(3);
+				String message = rs.getString(4);
+				
+				GuestBookVO vo = new GuestBookVO(no, name, reg_date, message);
+				list.add(vo);
+			}
+			
+		} catch(SQLException ex){
+			System.out.println("error:"+ex);
+		} finally{
+			try{
+				if(rs != null)		rs.close();
+				if(stmt != null)	stmt.close();
+				if(conn != null)	conn.close();
+			}catch(SQLException ex){
+				ex.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+	
 }
